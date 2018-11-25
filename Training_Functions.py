@@ -6,7 +6,7 @@ def make_train_set_for_target(target,alphabet,lengths=None,max_train_samples_per
         provided_examples = []
     if None == lengths:
         lengths = list(range(15))+[15,20,25,30] 
-    lengths = [1,2,3,4]
+    lengths = [1,2,3,4,5,6,7]
     for l in lengths:
         samples = [w for w in provided_examples if len(w)==l]
         samples += n_words_of_length(search_size_per_length,l,alphabet)
@@ -22,6 +22,8 @@ def make_train_set_for_target(target,alphabet,lengths=None,max_train_samples_per
 
     print("made train set of size:",len(train_set),", of which positive examples:",
         len([w for w in train_set if train_set[w]==True]))
+    print("made train set of size:",len(train_set),", of which false examples:",
+        len([w for w in train_set if train_set[w]==False]))
     return train_set
 
 #curriculum
