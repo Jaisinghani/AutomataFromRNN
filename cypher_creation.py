@@ -57,6 +57,13 @@ def nested_swap(sentence):
             i+=1
         
     return "".join(tempSentence), cy_rule  
-            
+      
+
+def userInput():
+    sentence= input('Please enter your message: ')
+    encrypted, rule = nested_swap(sentence)
+    print('Encrypted Message: ', encrypted)
+    print('Rule used for encryption: ', rule)
     
+ 
 
