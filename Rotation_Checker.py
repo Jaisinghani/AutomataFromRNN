@@ -2,19 +2,19 @@ import time
 from memory_profiler import profile
 # check a sentence(a list of words) return if its a rotation cyphered message
 
-def rtCyCdecode(messageList):  # Rotation cypher decode
-    letterList = ['a', 'e', 'i', 'n', 'o', 's', 't']
+def rtCyCdecode(messageList, alphabet):  # Rotation cypher decode
+
     convertedMsgList = []
 
-    for i in range(1, len(letterList)):
+    for i in range(1, len(alphabet)):
         convertedWordList = []
         for message in messageList:
             charList = list(message.lower())    # split a word to letters
             convertedMsg = ""
             for letter in charList:
-                lIndex = letterList.index(letter)
-                newLIndex = (lIndex + i) % len(letterList)
-                convertedMsg += letterList[newLIndex]
+                lIndex = alphabet.index(letter)
+                newLIndex = (lIndex + i) % len(alphabet)
+                convertedMsg += alphabet[newLIndex]
             convertedWordList.append(convertedMsg)
         convertedMsgList.append(convertedWordList)
 
@@ -70,8 +70,8 @@ def listToString(list):
     return sentence
 
 
-def rtCyChecker(messageList, rnn, dfa):  # Rotation cypher checker
-    convertedMsgList = rtCyCdecode(messageList)
+def rtCyChecker(messageList, alphabet, rnn, dfa):  # Rotation cypher checker
+    convertedMsgList = rtCyCdecode(messageList, alphabet)
     foundKeyRNN = False
     foundKeyDFA = False
     print("Try message in following list", '\n', convertedMsgList)
@@ -98,7 +98,10 @@ def rtCyChecker(messageList, rnn, dfa):  # Rotation cypher checker
     winner = ""
     winTime = ""
     timeDiff = abs(executeTimeRNN - executeTimeDFA)
-    if executeTimeRNN <= executeTimeDFA:
+    if executeTimeRNN == executeTimeDFA:
+        print ("runtimes are equal")
+        
+    elif executeTimeRNN < executeTimeDFA:
         winner = "RNN"
         loser = "DFA"
         winTime = executeTimeRNN
@@ -107,5 +110,7 @@ def rtCyChecker(messageList, rnn, dfa):  # Rotation cypher checker
         loser = "RNN"
         winTime = executeTimeDFA
 
-    print("RNN, DFA Comparison: " + '\n' + winner, "execute " +
+
+    if winTime != 0.0:
+        print("RNN, DFA Comparison: " + '\n' + winner, "execute " +
           '{percent:.2%}'.format(percent=timeDiff/winTime) + " faster than", loser)
