@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import random
-import string
 
 def rotate_sentence(sentence, n_rotations):
     
@@ -41,7 +40,7 @@ def swap_letters(sentence, cy_rule):
     
 def nested_swap(sentence):
     
-    random_Letters = string.ascii_lowercase[:]
+    random_Letters = ['e', 'a', 't', 's', 'o', 'i', 'n']
     
     cy_rule={}
     for letter in random_Letters:
@@ -59,7 +58,7 @@ def nested_swap(sentence):
     return "".join(tempSentence), cy_rule  
       
 
-def userInput():
+def user_Input():
     sentence= input('Please enter your message: ')
     encrypted, rule = nested_swap(sentence)
     print('Encrypted Message: ', encrypted)
