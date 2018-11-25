@@ -2,26 +2,20 @@
 
 import random
 
-def rotate_sentence(sentence, n_rotations):
+def rotate_sentence(sentence, alphabet):
     
     print(sentence)
     cy_sentence=[]
-
-    for i in range (0, len(sentence)):
+    
+    for i in range(0, len(sentence)):
+        num= alphabet.index(sentence[i])
         
-        print(ord(sentence[i]))
-        if (sentence[i]!=" "):
-            c= ord(sentence[i]) + n_rotations
-            if(c > ord('z')):
-                c= c- ord('z') + ord('a') - 1
-            if(c <= ord('Z')):
-                c+=32
-            cy_sentence.append(chr(c))
-        else:
-            cy_sentence.append(" ")
-    
-    return cy_sentence   
-    
+        if ((num + 1) >= len(alphabet)):
+            num=-1
+        cy_sentence.append(alphabet[num+1])
+        
+    print(cy_sentence)    
+
     
 def swap_letters(sentence, cy_rule):
     print(sentence)
@@ -64,5 +58,3 @@ def user_Input():
     print('Encrypted Message: ', encrypted)
     print('Rule used for encryption: ', rule)
     
- 
-
