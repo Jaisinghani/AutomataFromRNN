@@ -14,8 +14,6 @@ digraph = functools.partial(gv.Digraph, format='png')
 graph = functools.partial(gv.Graph, format='png')
 
 separator = "_"
-tf = dict()
-accept_states = []
 
 class DFA:
     def __init__(self,obs_table):
@@ -25,6 +23,8 @@ class DFA:
         self.F = [s for s in self.Q if obs_table.T[s]== 1]
         self._make_transition_function(obs_table)
         self.current_state = 0;
+        self.accept_states = []
+        self.tf = dict()
 
     def _make_transition_function(self,obs_table):
         self.delta = {}
@@ -50,8 +50,8 @@ class DFA:
         if score == -1:
             score = len(input_list)
         return score;
+    
     def wordsWithWordnessScore(self, word):
-
         for w in range(len(word)):
             print("updated word :", word)
             wordnessScore = dict()
@@ -63,16 +63,6 @@ class DFA:
                     temp[w] = self.alphabet[a]
                     score = self.run_with_input_list(temp);
                     wordnessScore.update({"".join(temp): score})
-
-                    # if w == 0:
-                    #     if self.current_state not in start_state:
-                    #         wordnessScore.update({str(temp): -1})
-                    #     else:
-                    #        score = d.run_with_input_list(temp);
-                    #        wordnessScore.update({str(temp): score})
-                    # else:
-                    #     score = d.run_with_input_list(temp);
-                    #     wordnessScore.update({str(temp): score})
             sorted_by_value = sorted(wordnessScore.items(), key=lambda kv: kv[1])
             print("wordnessScore :", wordnessScore)
 
@@ -131,7 +121,7 @@ class DFA:
         updatedStates = list(set(self.Q))
         for state,i in zip(states,range(1,len(updatedStates)+1)):
             if state in self.F:
-                accept_states.append(label_to_numberlabel(state))
+                self.accept_states.append(label_to_numberlabel(state))
 
         def group_edges():
             def clean_line(line,group):
@@ -206,11 +196,11 @@ class DFA:
             if "," in edges_dict[key]:
                 arr = edges_dict[key].split(",")
                 for a in arr:
-                    tf[(int_k1,a)] = int_k2
+                    self.tf[(int_k1,a)] = int_k2
             else:
-                tf[(int_k1,edges_dict[key])] = int_k2
-            print("tf :", tf)
-        display(Image(filename=g.render(filename='img/automaton')))
+                self.tf[(int_k1,edges_dict[key])] = int_k2
+            print("tf :", self.tf)
+        #display(Image(filename=g.render(filename='img/automaton')))
 
     def minimal_diverging_suffix(self,state1,state2): #gets series of letters showing the two states are different,
         # i.e., from which one state reaches accepting state and the other reaches rejecting state
