@@ -40,8 +40,6 @@ class DFA:
         self.go_to_initial_state();
         score = -1
         for inp in range(len(input_list)):
-            print("current state :", self.current_state)
-            print "left", (self.current_state, input_list[inp])
             if ((self.current_state, input_list[inp]) not in self.tf.keys()):
                 score = inp;
                 break
@@ -53,24 +51,17 @@ class DFA:
     
     def wordsWithWordnessScore(self, word):
         for w in range(len(word)):
-            print("updated word :", word)
             wordnessScore = dict()
             for a in range(len(self.alphabet)):
-                print(word[w])
-                print(self.alphabet[a])
                 if (word[w] != self.alphabet[a]):
                     temp = word[:]
                     temp[w] = self.alphabet[a]
                     score = self.run_with_input_list(temp);
                     wordnessScore.update({"".join(temp): score})
             sorted_by_value = sorted(wordnessScore.items(), key=lambda kv: kv[1])
-            print("wordnessScore :", wordnessScore)
-
             y = sorted_by_value.__getitem__(-1)
-            print("y[0] :", y[0])
 
             word = list(y[0])
-            print("word :", word)
 
         return word
     
@@ -188,8 +179,6 @@ class DFA:
         #                  for a in self.alphabet for state in self.Q])
         
         for key in edges_dict:
-            print("key :", key)
-            print("ev :", edges_dict[key])
             k1,k2 = key
             int_k1 = int(k1) - 1
             int_k2 = int(k2) - 1
@@ -199,7 +188,6 @@ class DFA:
                     self.tf[(int_k1,a)] = int_k2
             else:
                 self.tf[(int_k1,edges_dict[key])] = int_k2
-            print("tf :", self.tf)
         #display(Image(filename=g.render(filename='img/automaton')))
 
     def minimal_diverging_suffix(self,state1,state2): #gets series of letters showing the two states are different,
