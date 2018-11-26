@@ -4,6 +4,7 @@ from memory_profiler import profile
 
 def rtCyCdecode(messageList, alphabet):  # Rotation cypher decode
 
+    messageList = messageList.split()
     convertedMsgList = []
 
     for i in range(1, len(alphabet)):
@@ -24,6 +25,8 @@ def rtCyCdecode(messageList, alphabet):  # Rotation cypher decode
 #@profile(precision=8)
 def checkRNN(convertedMsgList, rnn):
     foundKey = False
+    possList = []
+    maxMatch = float('-inf')
     for list in convertedMsgList:
         realWordList = []
         for word in list:
@@ -32,19 +35,27 @@ def checkRNN(convertedMsgList, rnn):
         if len(realWordList) == len(list):
             foundKey = True
             break
-
+        if len(realWordList) > maxMatch:
+            possList = list
+            maxMatch = len(realWordList)
+            
     if foundKey:
         msg = listToString(realWordList)
         print("Cyphered Message is English", msg, "in RNN")
-        return True
+        #return True
     else:
-        return False
+        print(len(possList), "out of ", len(convertedMsgList[0]), "words is English")
+        msg = listToString(possList)
+        print("Cyphered Message is English", msg, "in RNN")
+        #return False
 
 
 
 #@profile(precision=8)
 def checkDFA(convertedMsgList, dfa):
     foundKey = False
+    possList = []
+    maxMatch = float('-inf')
     for list in convertedMsgList:
         realWordList = []
         for word in list:
@@ -53,13 +64,19 @@ def checkDFA(convertedMsgList, dfa):
         if len(realWordList) == len(list):
             foundKey = True
             break
+        if len(realWordList) > maxMatch:
+            possList = list
+            maxMatch = len(realWordList)
 
     if foundKey:
         msg = listToString(realWordList)
         print("Cyphered Message is English", msg, "in DFA")
-        return True
+        #return True
     else:
-        return False
+        print(len(possList), "out of ", len(convertedMsgList[0]), "words is English")
+        msg = listToString(possList)
+        print("Cyphered Message is English", msg, "in RNN")
+        #return False
 
 
 def listToString(list):
@@ -72,29 +89,30 @@ def listToString(list):
 
 def rtCyChecker(messageList, alphabet, rnn, dfa):  # Rotation cypher checker
     convertedMsgList = rtCyCdecode(messageList, alphabet)
-    foundKeyRNN = False
-    foundKeyDFA = False
+    #foundKeyRNN = False
+    #foundKeyDFA = False
     print("Try message in following list", '\n', convertedMsgList)
 
 
     startRNN = time.time()
-    if checkRNN(convertedMsgList, rnn):
-        foundKeyRNN = True
+    #if checkRNN(convertedMsgList, rnn):
+    foundKeyRNN = True
     executeTimeRNN = time.time() - startRNN
     print("RNN execution time", executeTimeRNN)
 
     startDFA = time.time()
-    if checkDFA(convertedMsgList, dfa):
-        foundKeyDFA = True
+    #if checkDFA(convertedMsgList, dfa):
+    foundKeyDFA = True
     executeTimeDFA = time.time() - startDFA
     print("DFA execution time", executeTimeDFA)
-
+    '''
     if foundKeyRNN != foundKeyDFA:
         print("RNN and DFA returned different result")
 
     if not foundKeyRNN and not foundKeyDFA:
         print("No rotation cyphered message founded")
-
+    '''
+    
     winner = ""
     winTime = ""
     timeDiff = abs(executeTimeRNN - executeTimeDFA)

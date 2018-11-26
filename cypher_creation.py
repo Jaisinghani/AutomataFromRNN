@@ -14,7 +14,7 @@ def rotate_sentence(sentence, alphabet):
             num=-1
         cy_sentence.append(alphabet[num+1])
         
-    print(cy_sentence)    
+    return(cy_sentence)    
 
     
 def swap_letters(sentence, cy_rule):
