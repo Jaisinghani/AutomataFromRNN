@@ -19,7 +19,8 @@ def rotate_sentence(sentence, alphabet):
         cy_sentence += t_list
         cy_sentence += ' '
         
-    return cy_sentence
+    return cy_sentence    
+
 
     
 def swap_letters(sentence):
