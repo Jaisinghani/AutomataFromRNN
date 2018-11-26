@@ -5,7 +5,8 @@ def freqAnalysis(MEANINGFULWORDS):
    #     wordList=f.read()
     tempDict=Counter()
     for word in MEANINGFULWORDS:
-        tempDict[word]+=1     
+        for l in word:
+            tempDict[l]+=1     
     notWord=["'",","," ","\n",]
     frequencyAnalysis={}
     for k in tempDict:
@@ -52,8 +53,8 @@ def freqAnalysisSwap(MEANINGFULWORDS,SENTENCE):
     tempWord=[]
     letterList=freqAnalysis(MEANINGFULWORDS)
     letterMapping=sentenceOrder(letterList,SENTENCE)
-    print("a:",letterList)
-    print("b:",letterMapping)
+    #print("a:",letterList)
+    #print("b:",letterMapping)
     for word in SENTENCE.split():
         tempString=" "
         for l in word:
@@ -73,6 +74,6 @@ from collections import Counter
 #MEANINGFULWORDS=[]
 #for word in wordList:
 #    MEANINGFULWORDS.append(word)
-SENTENCE="eat is ir tae ate"
-output=freqAnalysisSwap(MEANINGFULWORDS,SENTENCE)
-print("output:",output)
+#SENTENCE="eat is ir tae ate"
+#output=freqAnalysisSwap(MEANINGFULWORDS,SENTENCE)
+#return(output)
