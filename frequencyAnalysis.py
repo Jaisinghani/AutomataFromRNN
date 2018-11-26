@@ -66,7 +66,7 @@ def freqAnalysisSwap(MEANINGFULWORDS,SENTENCE):
         tempString.join(tempWord) 
         tempWord.append(tempString)
     result=sentenceString.join(tempWord)
-    return result
+    return result, letterMapping
 
 from collections import Counter
 #with open('words.txt', 'r') as f:
