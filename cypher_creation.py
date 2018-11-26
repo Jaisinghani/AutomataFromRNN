@@ -23,9 +23,7 @@ def rotate_sentence(sentence, alphabet):
 
 
     
-def swap_letters(sentence):
-    
-    random_Letters = ['e', 'a', 't', 's', 'o', 'i', 'n']
+def swap_letters(sentence, random_Letters):
     temp_list= random_Letters.copy()
     
     cy_rule={}
