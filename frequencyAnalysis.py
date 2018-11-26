@@ -1,12 +1,12 @@
-def freqAnalysis():
+def freqAnalysis(MEANINGFULWORDS):
     frequencyAnalysis={}
     letterList=[]
-    with open('words.txt', 'r') as f:
-        wordList=f.read()
+   # with open('words.txt', 'r') as f:
+   #     wordList=f.read()
     tempDict=Counter()
-    for word in wordList:
+    for word in MEANINGFULWORDS:
         tempDict[word]+=1     
-    notWord=["'",","," ","\n"]
+    notWord=["'",","," ","\n",]
     frequencyAnalysis={}
     for k in tempDict:
         if k in notWord:
@@ -23,13 +23,13 @@ def freqAnalysis():
         letterList.append(k[0]) 
     return letterList
 
-def sentenceOrder(letterList): 
+def sentenceOrder(letterList,SENTENCE): 
     sentenceOrder=[]            #pass this value
     letterMapping={}
-    with open('testSentences.txt', 'r') as f:    ## reading sentence from file
-        sentence=f.read()
+  #  with open('testSentences.txt', 'r') as f:    ## reading sentence from file
+  #      sentence=f.read()
     tempDict=Counter()
-    for word in sentence:
+    for word in SENTENCE:
         tempDict[word]+=1       
     notWord=[" ","\n"]
     faSentence={}
@@ -44,15 +44,17 @@ def sentenceOrder(letterList):
     #print(sentenceOrder)
     for i,k in enumerate(sentenceOrder):
         letterMapping.update({k[0]:letterList[i]})
-    return letterMapping,sentence
+    return letterMapping
 
-def freqAnalysisSwap():
+def freqAnalysisSwap(MEANINGFULWORDS,SENTENCE):
     tempSentence=[]
     sentenceString=""
     tempWord=[]
-    letterList=freqAnalysis()
-    letterMapping,sentence=sentenceOrder(letterList)
-    for word in sentence.split():
+    letterList=freqAnalysis(MEANINGFULWORDS)
+    letterMapping=sentenceOrder(letterList,SENTENCE)
+    print("a:",letterList)
+    print("b:",letterMapping)
+    for word in SENTENCE.split():
         tempString=" "
         for l in word:
             if l in letterMapping:
@@ -66,5 +68,11 @@ def freqAnalysisSwap():
     return result
 
 from collections import Counter
-output=freqAnalysisSwap()
-print(output)
+#with open('words.txt', 'r') as f:
+#     wordList=f.read()
+#MEANINGFULWORDS=[]
+#for word in wordList:
+#    MEANINGFULWORDS.append(word)
+SENTENCE="eat is ir tae ate"
+output=freqAnalysisSwap(MEANINGFULWORDS,SENTENCE)
+print("output:",output)
