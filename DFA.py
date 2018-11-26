@@ -14,6 +14,8 @@ digraph = functools.partial(gv.Digraph, format='png')
 graph = functools.partial(gv.Graph, format='png')
 
 separator = "_"
+tf = dict()
+accept_states = []
 
 class DFA:
     def __init__(self,obs_table):
@@ -22,6 +24,7 @@ class DFA:
         self.q0 = obs_table.minimum_matching_row("")
         self.F = [s for s in self.Q if obs_table.T[s]== 1]
         self._make_transition_function(obs_table)
+        self.current_state = 0;
 
     def _make_transition_function(self,obs_table):
         self.delta = {}
@@ -29,7 +32,59 @@ class DFA:
             self.delta[s] = {}
             for a in self.alphabet:
                 self.delta[s][a] = obs_table.minimum_matching_row(s+a)
+                
+    def go_to_initial_state(self):
+        self.current_state = 0;
+        
+    def run_with_input_list(self, input_list):
+        self.go_to_initial_state();
+        score = -1
+        for inp in range(len(input_list)):
+            print("current state :", self.current_state)
+            print "left", (self.current_state, input_list[inp])
+            if ((self.current_state, input_list[inp]) not in self.tf.keys()):
+                score = inp;
+                break
+            else:
+                self.current_state = self.tf.get((self.current_state, input_list[inp]))
+        if score == -1:
+            score = len(input_list)
+        return score;
+    def wordsWithWordnessScore(self, word):
 
+        for w in range(len(word)):
+            print("updated word :", word)
+            wordnessScore = dict()
+            for a in range(len(self.alphabet)):
+                print(word[w])
+                print(self.alphabet[a])
+                if (word[w] != self.alphabet[a]):
+                    temp = word[:]
+                    temp[w] = self.alphabet[a]
+                    score = self.run_with_input_list(temp);
+                    wordnessScore.update({"".join(temp): score})
+
+                    # if w == 0:
+                    #     if self.current_state not in start_state:
+                    #         wordnessScore.update({str(temp): -1})
+                    #     else:
+                    #        score = d.run_with_input_list(temp);
+                    #        wordnessScore.update({str(temp): score})
+                    # else:
+                    #     score = d.run_with_input_list(temp);
+                    #     wordnessScore.update({str(temp): score})
+            sorted_by_value = sorted(wordnessScore.items(), key=lambda kv: kv[1])
+            print("wordnessScore :", wordnessScore)
+
+            y = sorted_by_value.__getitem__(-1)
+            print("y[0] :", y[0])
+
+            word = list(y[0])
+            print("word :", word)
+
+        return word
+    
+    
     def classify_word(self,word):
         #assumes word is string with only letters in alphabet
         q = self.q0
@@ -72,6 +127,11 @@ class DFA:
         g = add_nodes(g, [(label_to_numberlabel(state),{'color': 'green' if state in self.F else 'black',
                                   'label': str(i)})
                           for state,i in zip(states,range(1,len(states)+1))])
+        
+        updatedStates = list(set(self.Q))
+        for state,i in zip(states,range(1,len(updatedStates)+1)):
+            if state in self.F:
+                accept_states.append(label_to_numberlabel(state))
 
         def group_edges():
             def clean_line(line,group):
@@ -136,6 +196,20 @@ class DFA:
         #                  self.Q]))
         # g = add_edges(g,[((label_to_numberlabel(state),label_to_numberlabel(self.delta[state][a])),{'label':a})
         #                  for a in self.alphabet for state in self.Q])
+        
+        for key in edges_dict:
+            print("key :", key)
+            print("ev :", edges_dict[key])
+            k1,k2 = key
+            int_k1 = int(k1) - 1
+            int_k2 = int(k2) - 1
+            if "," in edges_dict[key]:
+                arr = edges_dict[key].split(",")
+                for a in arr:
+                    tf[(int_k1,a)] = int_k2
+            else:
+                tf[(int_k1,edges_dict[key])] = int_k2
+            print("tf :", tf)
         display(Image(filename=g.render(filename='img/automaton')))
 
     def minimal_diverging_suffix(self,state1,state2): #gets series of letters showing the two states are different,
