@@ -5,16 +5,23 @@ import random
 def rotate_sentence(sentence, alphabet):
     
     print(sentence)
-    cy_sentence=[]
-    
-    for i in range(0, len(sentence)):
-        num= alphabet.index(sentence[i])
+    cy_sentence=""
+    temp= sentence.split()
+
+    for word in temp:
+        t_list=""
+        for letter in word:
+            num= alphabet.index(letter)
         
-        if ((num + 1) >= len(alphabet)):
-            num=-1
-        cy_sentence.append(alphabet[num+1])
+            if ((num + 1) >= len(alphabet)):
+                num=-1
+            
+            t_list += alphabet[num+1]
+        cy_sentence += t_list
+        cy_sentence += ' '
         
-    return(cy_sentence)    
+    return cy_sentence    
+
 
     
 def swap_letters(sentence, cy_rule):
@@ -57,4 +64,6 @@ def user_Input():
     encrypted, rule = nested_swap(sentence)
     print('Encrypted Message: ', encrypted)
     print('Rule used for encryption: ', rule)
+    
+
     
