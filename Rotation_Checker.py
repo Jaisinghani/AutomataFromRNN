@@ -27,27 +27,32 @@ def checkRNN(convertedMsgList, rnn):
     foundKey = False
     possList = []
     maxMatch = float('-inf')
+    matchList = []
     for list in convertedMsgList:
         realWordList = []
         for word in list:
             if rnn.classify_word(word):
                 realWordList.append(word)
+
         if len(realWordList) == len(list):
             foundKey = True
-            break
-        if len(realWordList) > maxMatch:
-            possList = list
-            maxMatch = len(realWordList)
+            matchList.append(realWordList)
+        else:
+            if len(realWordList) > maxMatch:
+                possList = list
+                maxMatch = len(realWordList)
             
     if foundKey:
-        msg = listToString(realWordList)
-        print("Cyphered Message is English", msg, "in RNN")
-        #return True
+        for match in matchList:
+            msg = listToString(match)
+            print("Cyphered Message is English", msg, "in RNN")
+        return 1
     else:
         print(len(possList), "out of ", len(convertedMsgList[0]), "words is English")
         msg = listToString(possList)
         print("Cyphered Message is English", msg, "in RNN")
-        #return False
+        return len(possList) / len(convertedMsgList[0])
+
 
 
 
@@ -56,27 +61,32 @@ def checkDFA(convertedMsgList, dfa):
     foundKey = False
     possList = []
     maxMatch = float('-inf')
+    matchList = []
     for list in convertedMsgList:
         realWordList = []
         for word in list:
             if dfa.classify_word(word):
                 realWordList.append(word)
+
         if len(realWordList) == len(list):
             foundKey = True
-            break
-        if len(realWordList) > maxMatch:
-            possList = list
-            maxMatch = len(realWordList)
+            matchList.append(realWordList)
+        else:
+            if len(realWordList) > maxMatch:
+                possList = list
+                maxMatch = len(realWordList)
+            
 
     if foundKey:
-        msg = listToString(realWordList)
-        print("Cyphered Message is English", msg, "in DFA")
-        #return True
+        for match in matchList:
+            msg = listToString(match)
+            print("Cyphered Message is English", msg, "in DFA")
+        return 1
     else:
         print(len(possList), "out of ", len(convertedMsgList[0]), "words is English")
         msg = listToString(possList)
-        print("Cyphered Message is English", msg, "in RNN")
-        #return False
+        print("Cyphered Message is English", msg, "in DFA")
+        return len(possList) / len(convertedMsgList[0])
 
 
 def listToString(list):
@@ -89,32 +99,26 @@ def listToString(list):
 
 def rtCyChecker(messageList, alphabet, rnn, dfa):  # Rotation cypher checker
     convertedMsgList = rtCyCdecode(messageList, alphabet)
-    #foundKeyRNN = False
-    #foundKeyDFA = False
+    foundKeyRNN = False
+    foundKeyDFA = False
     print("Try message in following list", '\n', convertedMsgList)
 
 
     startRNN = time.time()
-    #if checkRNN(convertedMsgList, rnn):
-    foundKeyRNN = True
+    
+    if checkRNN(convertedMsgList, rnn):
+        foundKeyRNN = True  
     executeTimeRNN = time.time() - startRNN
     print("RNN execution time", executeTimeRNN)
 
     startDFA = time.time()
-    #if checkDFA(convertedMsgList, dfa):
-    foundKeyDFA = True
+    if checkDFA(convertedMsgList, dfa):
+        foundKeyDFA = True
     executeTimeDFA = time.time() - startDFA
     print("DFA execution time", executeTimeDFA)
-    '''
-    if foundKeyRNN != foundKeyDFA:
-        print("RNN and DFA returned different result")
-
-    if not foundKeyRNN and not foundKeyDFA:
-        print("No rotation cyphered message founded")
-    '''
     
     winner = ""
-    winTime = ""
+    winTime = 0.0
     timeDiff = abs(executeTimeRNN - executeTimeDFA)
     if executeTimeRNN == executeTimeDFA:
         print ("runtimes are equal")
@@ -130,5 +134,8 @@ def rtCyChecker(messageList, alphabet, rnn, dfa):  # Rotation cypher checker
 
 
     if winTime != 0.0:
-        print("RNN, DFA Comparison: " + '\n' + winner, "execute " +
-          '{percent:.2%}'.format(percent=timeDiff/winTime) + " faster than", loser)
+        print ("WOW")
+        #print("RNN, DFA Comparison: " + '\n' + winner, "execute " +
+        #  '{percent:.2%}'.format(percent=timeDiff/winTime) + " faster than", loser)
+    
+    return foundKeyRNN, foundKeyDFA
