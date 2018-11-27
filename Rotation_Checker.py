@@ -41,7 +41,7 @@ def checkRtCy(message, alphabet, learner):
     for match in matchList:
         msg = listToString(match)
         msgList.append(msg)
-    accuracy = '{percent:.2%}'.format(percent= maxMatch/ len(convertedMsgList[0]))
+    accuracy =  maxMatch/ len(convertedMsgList[0])
 
     return (accuracy, msgList)
 
