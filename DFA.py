@@ -45,8 +45,8 @@ class DFA:
                 break
             else:
                 self.current_state = self.tf.get((self.current_state, input_list[inp]))
-        if score == -1:
-            score = len(input_list)
+        if score == -1 and self.classify_word("".join(input_list)):
+            score = 100
         return score;
     
     def wordsWithWordnessScore(self, word):
